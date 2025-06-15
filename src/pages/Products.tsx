@@ -270,45 +270,47 @@ const ProductsPage: React.FC = () => {
                   {filteredProducts.map((product, i) => (
                     <div
                       key={product.id}
-                      className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 hover:shadow-2xl transition-all duration-300 group"
+                      className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 md:p-6 hover:shadow-2xl transition-all duration-300 group animate-fade-in"
                       style={{ animationDelay: `${i * 50}ms` }}
                     >
-                      <div className="flex items-center space-x-6">
+                      <div className="flex flex-col md:flex-row md:items-center md:space-x-6 space-y-4 md:space-y-0">
                         <ImageWithLoading
                           src={product.image || '/placeholder.svg'}
                           alt={product.name}
-                          width={150}
-                          height={200}
-                          className="w-32 h-40 rounded-xl"
+                          width={200}
+                          height={250}
+                          className="w-full h-48 md:w-40 md:h-52 rounded-xl object-cover"
                         />
                         <div className="flex-1">
-                          <div className="flex items-center mb-2">
-                            <span className="px-3 py-1 bg-sage-50 text-sage-600 text-sm rounded-full mr-3">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <span className="px-3 py-1 bg-sage-50 text-sage-600 text-xs sm:text-sm rounded-full">
                               {product.category}
                             </span>
-                            <div className="flex text-yellow-400 mr-2">
-                              {[...Array(5)].map((_, idx) => (
-                                <Star key={idx} className="h-4 w-4 fill-current" />
-                              ))}
+                            <div className="flex items-center">
+                              <div className="flex text-yellow-400">
+                                {[...Array(5)].map((_, idx) => (
+                                  <Star key={idx} className="h-4 w-4 fill-current" />
+                                ))}
+                              </div>
+                              <span className="text-xs sm:text-sm text-gray-500 ml-2">(4.8)</span>
                             </div>
-                            <span className="text-sm text-gray-500">(4.8)</span>
                           </div>
-                          <h3 className="text-xl font-medium text-gray-900 mb-3 group-hover:text-sage-600 transition-colors">
-                            {product.name}
+                          <h3 className="text-lg md:text-xl font-medium text-gray-900 mb-2 group-hover:text-sage-600 transition-colors">
+                            <Link to={`/products/${product.id}`}>{product.name}</Link>
                           </h3>
-                          <p className="text-gray-600 mb-4">{product.description}</p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-2xl font-medium text-sage-600">${product.price}</span>
-                            <div className="flex items-center space-x-3">
+                          <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mt-4">
+                            <span className="text-xl md:text-2xl font-medium text-sage-600 mb-3 sm:mb-0">${product.price}</span>
+                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
                               <button
                                 onClick={() => addToCart(product)}
-                                className="px-6 py-3 bg-sage-600 text-white rounded-xl hover:bg-sage-700 flex items-center space-x-2"
+                                className="px-4 py-2 sm:px-6 sm:py-3 bg-sage-600 text-white rounded-xl hover:bg-sage-700 flex items-center justify-center space-x-2 text-sm sm:text-base"
                               >
                                 <ShoppingCart className="h-5 w-5" /> <span>Add to Cart</span>
                               </button>
                               <Link
                                 to={`/products/${product.id}`}
-                                className="px-6 py-3 border border-sage-600 text-sage-600 rounded-xl hover:bg-sage-50"
+                                className="px-4 py-2 sm:px-6 sm:py-3 border border-sage-600 text-sage-600 rounded-xl hover:bg-sage-50 text-center text-sm sm:text-base"
                               >
                                 View Details
                               </Link>
