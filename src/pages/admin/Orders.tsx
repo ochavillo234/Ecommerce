@@ -1,6 +1,6 @@
 import type React from "react"
 import { useState } from "react"
-import { Search, Filter, ArrowUpDown, Edit, Trash2, Eye, Download, Calendar, RefreshCw } from "lucide-react"
+import { Search, Filter, ArrowUpDown, Edit, Trash2, Eye, Calendar, RefreshCw } from "lucide-react"
 
 // Dummy order data
 const initialOrders = [
