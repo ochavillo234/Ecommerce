@@ -11,6 +11,7 @@ import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import ProfilePage from './pages/Profile';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ReportsPage from './pages/admin/Reports';
 import AdminProductsPage from "./pages/admin/AdminProducts";
@@ -44,6 +45,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/profile" element={<ProfilePage />} />
             </Route>
 
             {/* Ito naman yung route group para sa admin panel. */}

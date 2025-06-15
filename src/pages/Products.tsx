@@ -6,7 +6,6 @@ import {
   SlidersHorizontal,
   ArrowRight,
   Star,
-  Heart,
   ShoppingCart,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -16,6 +15,7 @@ import ImageWithLoading from '../components/ImageWithLoading';
 import { products, categories } from '../data/products';
 import type { Product } from '../contexts/CartContext';
 import { useCart } from '../contexts/CartContext';
+import { toast } from 'sonner';
 
 const ProductsPage: React.FC = () => {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
@@ -72,11 +72,19 @@ const ProductsPage: React.FC = () => {
     setFilteredProducts(fp);
   }, [selectedCategory, searchTerm, sortBy, priceRange]);
 
-  const addToCart = (product: Product) => {
+  const handleAddToCart = (product: Product) => {
     dispatch({
       type: 'ADD_TO_CART',
       payload: { ...product, quantity: 1, selectedSize: product.sizes[0], selectedColor: product.colors[0] },
     });
+    toast.success(`${product.name} has been added to your cart!`,
+      {
+        action: {
+          label: 'View Cart',
+          onClick: () => window.location.href = '/cart',
+        },
+      }
+    );
   };
 
   return (
@@ -95,7 +103,7 @@ const ProductsPage: React.FC = () => {
               </p>
             </div>
           </div>
-
+  
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Sidebar Filters */}
             <aside className={`lg:w-80 lg:sticky lg:top-32 lg:self-start ${showFilters ? 'block' : 'hidden lg:block'}`}>
@@ -106,7 +114,7 @@ const ProductsPage: React.FC = () => {
                     ×
                   </button>
                 </div>
-
+  
                 {/* Search */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">Search</label>
@@ -118,7 +126,7 @@ const ProductsPage: React.FC = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
-
+  
                 {/* Categories */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">Category</label>
@@ -138,7 +146,7 @@ const ProductsPage: React.FC = () => {
                     ))}
                   </div>
                 </div>
-
+  
                 {/* Price Range */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -153,7 +161,7 @@ const ProductsPage: React.FC = () => {
                     className="input-range"
                   />
                 </div>
-
+  
                 {/* Sort */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-3">Sort By</label>
@@ -165,7 +173,7 @@ const ProductsPage: React.FC = () => {
                 </div>
               </div>
             </aside>
-
+  
             {/* Main Content */}
             <main className="flex-1">
               {/* Toolbar */}
@@ -202,7 +210,7 @@ const ProductsPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-
+  
               {/* Products */}
               {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -221,22 +229,6 @@ const ProductsPage: React.FC = () => {
                           className="w-full h-80 group-hover:scale-110 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        <div className="absolute top-4 right-4 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
-                          <button className="p-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-700 hover:text-rose-600 hover:bg-white shadow-lg">
-                            <Heart className="h-5 w-5" />
-                          </button>
-                          <button
-                            onClick={() => addToCart(product)}
-                            className="p-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-700 hover:text-sage-600 hover:bg-white shadow-lg"
-                          >
-                            <ShoppingCart className="h-5 w-5" />
-                          </button>
-                        </div>
-                        <div className="absolute top-4 left-4">
-                          <span className="px-3 py-1 bg-white/90 backdrop-blur-sm text-gray-800 text-sm rounded-full">
-                            {product.category}
-                          </span>
-                        </div>
                       </div>
                       <div className="p-6">
                         <div className="flex items-center mb-2">
@@ -303,7 +295,7 @@ const ProductsPage: React.FC = () => {
                             <span className="text-xl md:text-2xl font-medium text-sage-600 mb-3 sm:mb-0">${product.price}</span>
                             <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
                               <button
-                                onClick={() => addToCart(product)}
+                                onClick={() => handleAddToCart(product)}
                                 className="px-4 py-2 sm:px-6 sm:py-3 bg-sage-600 text-white rounded-xl hover:bg-sage-700 flex items-center justify-center space-x-2 text-sm sm:text-base"
                               >
                                 <ShoppingCart className="h-5 w-5" /> <span>Add to Cart</span>
@@ -322,7 +314,7 @@ const ProductsPage: React.FC = () => {
                   ))}
                 </div>
               )}
-
+  
               {/* Empty State */}
               {filteredProducts.length === 0 && (
                 <div className="text-center py-20">

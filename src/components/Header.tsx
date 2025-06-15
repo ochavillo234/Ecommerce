@@ -19,6 +19,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
   const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
@@ -381,6 +382,19 @@ const Header: React.FC = () => {
                   </Link>
                 ))}
               </div>
+
+              <Link
+                to="/cart"
+                className="flex items-center justify-between text-lg font-light text-gray-800 hover:text-sage-600 py-3 px-4 rounded-xl hover:bg-sage-50 transition-all"
+                onClick={closeMenu}
+              >
+                <span>Shopping Cart</span>
+                {state.items.length > 0 && (
+                  <span className="h-6 w-6 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center">
+                    {state.items.length}
+                  </span>
+                )}
+              </Link>
 
               <div className="border-t border-gray-100 pt-4 mt-4">
                 {user ? (

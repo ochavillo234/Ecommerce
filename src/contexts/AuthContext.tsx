@@ -4,7 +4,16 @@ interface User {
   id: string;
   name: string;
   email: string;
+  phone?: string;
   isAdmin: boolean;
+  profilePicture?: string;
+  address?: {
+    street: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+  };
 }
 
 interface AuthContextType {
@@ -12,6 +21,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
+  updateUser: (updatedUser: Partial<User>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -34,12 +44,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Kung successful yung login from API, i-se-set mo yung user data.
     // Halimbawa: if (response.success) { setUser(response.user); return true; }
     if (email === 'admin@hanbok.com' && password === 'admin123') {
-      setUser({ id: '1', name: 'Admin User', email: 'admin@hanbok.com', isAdmin: true });
+      setUser({ id: '1', name: 'Admin User', email: 'admin@hanbok.com', isAdmin: true, profilePicture: '/placeholder-user.svg', phone: '123-456-7890', address: { street: '123 Admin St', city: 'Seoul', state: 'Seoul', zip: '04524', country: 'South Korea' } });
       return true;
     }
 
     if (email === 'user@hanbok.com' && password === 'user123') {
-      setUser({ id: '2', name: 'Regular User', email: 'user@hanbok.com', isAdmin: false });
+      setUser({ id: '2', name: 'Regular User', email: 'user@hanbok.com', isAdmin: false, profilePicture: '/placeholder-user.svg', phone: '098-765-4321', address: { street: '456 User Ave', city: 'Busan', state: 'Busan', zip: '48053', country: 'South Korea' } });
       return true;
     }
 
@@ -57,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Kung successful yung registration, i-lo-login mo na rin yung user.
     // Halimbawa: if (response.success) { setUser(response.user); return true; }
-    setUser({ id: Date.now().toString(), name, email, isAdmin: false });
+    setUser({ id: Date.now().toString(), name, email, isAdmin: false, profilePicture: '/placeholder-user.svg', phone: '555-555-5555', address: { street: '789 New St', city: 'Incheon', state: 'Incheon', zip: '22332', country: 'South Korea' } });
     return true;
   };
 
@@ -65,7 +75,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // Pwede ka ring mag-add ng API call dito para i-invalidate yung session sa backend.
   const logout = () => setUser(null);
 
-  return <AuthContext.Provider value={{ user, login, register, logout }}>{children}</AuthContext.Provider>;
+  const updateUser = (updatedUser: Partial<User>) => {
+    if (user) {
+      setUser({ ...user, ...updatedUser });
+    }
+  };
+
+  return <AuthContext.Provider value={{ user, login, register, logout, updateUser }}>{children}</AuthContext.Provider>;
 }
 
 // Custom hook para mas madaling gamitin yung AuthContext sa ibang components.

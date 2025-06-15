@@ -5,8 +5,6 @@ import {
   Minus,
   ShoppingBag,
   ArrowRight,
-  Heart,
-  Star,
   Gift,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -132,7 +130,7 @@ const CartPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-white">
       <Header />
-
+  
       <div className="pt-32 pb-16">
         <div className="max-w-screen-2xl mx-auto px-6 md:px-12">
           {/* Header */}
@@ -140,7 +138,7 @@ const CartPage: React.FC = () => {
             <h1 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">Shopping Cart</h1>
             <p className="text-xl text-gray-600">Review your selected items and proceed to checkout</p>
           </div>
-
+  
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-12">
             {/* Cart Items */}
             <div className="xl:col-span-2 space-y-6">
@@ -165,74 +163,61 @@ const CartPage: React.FC = () => {
                         </span>
                       </div>
                     </div>
-
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between mb-4">
+                    
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="text-xl font-medium text-gray-900 mb-2">{item.name}</h3>
-                          <div className="flex items-center mb-2">
-                            <div className="flex text-yellow-400 mr-2">
-                              {[...Array(5)].map((_, i) => (
-                                <Star key={i} className="h-4 w-4 fill-current" />
-                              ))}
-                            </div>
-                            <span className="text-sm text-gray-500">(4.8)</span>
-                          </div>
-                          <div className="flex items-center space-x-4 text-sm text-gray-600">
-                            <span>Size: {item.selectedSize}</span>
-                            <span>•</span>
-                            <span>Color: {item.selectedColor}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <button className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-all">
-                            <Heart className="h-5 w-5" />
-                          </button>
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-all"
+                          <Link
+                            to={`/products/${item.id}`}
+                            className="text-base md:text-lg font-medium text-gray-900 hover:text-sage-600"
                           >
-                            <Trash2 className="h-5 w-5" />
+                            {item.name}
+                          </Link>
+                          <p className="text-sm text-gray-500 mt-1">
+                            {item.selectedColor} / {item.selectedSize}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full flex-shrink-0"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </button>
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-4">
+                        <div className="flex items-center border border-gray-200 rounded-lg mb-3 sm:mb-0">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="px-3 py-2 text-gray-500 hover:bg-gray-50 rounded-l-lg"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="px-4 py-1 text-center w-12 sm:w-16 text-sm sm:text-base">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="px-3 py-2 text-gray-500 hover:bg-gray-50 rounded-r-lg"
+                          >
+                            <Plus className="h-4 w-4" />
                           </button>
                         </div>
-                      </div>
-
-                      {/* Update quantity controls in cart items */}
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <div className="quantity-control">
-                            <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="quantity-button">
-                              <Minus className="h-4 w-4" />
-                            </button>
-                            <input
-                              type="number"
-                              value={item.quantity}
-                              onChange={(e) => updateQuantity(item.id, Number.parseInt(e.target.value) || 1)}
-                              className="input-quantity"
-                              min={1}
-                            />
-                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="quantity-button">
-                              <Plus className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </div>
-
-                        <div className="text-right">
-                          <p className="text-2xl font-medium text-sage-600">${(item.price * item.quantity).toFixed(2)}</p>
-                          <p className="caption">${item.price} each</p>
-                        </div>
+                        <span className="text-lg font-medium text-gray-900 self-end sm:self-center">
+                          ${(item.price * item.quantity).toFixed(2)}
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-
+  
             {/* Order Summary */}
             <div className="xl:col-span-1">
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 sticky top-32">
                 <h2 className="text-2xl font-medium text-gray-900 mb-8">Order Summary</h2>
-
+  
                 {/* Promo Code */}
                 <div className="promo-container">
                   <div className="flex items-center mb-3">
@@ -257,7 +242,7 @@ const CartPage: React.FC = () => {
                     </p>
                   )}
                 </div>
-
+  
                 {/* Price Breakdown */}
                 <div className="space-y-4 mb-8">
                   <div className="flex justify-between text-gray-600">
@@ -285,14 +270,14 @@ const CartPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
+  
                 {/* Free Shipping Notice */}
                 {subtotal < 100 && (
                   <div className="mb-6 p-4 bg-blue-50 rounded-xl">
                     <p className="text-sm text-blue-700">Add ${(100 - subtotal).toFixed(2)} more for free shipping!</p>
                   </div>
                 )}
-
+  
                 {/* Checkout Button */}
                 <Link
                   to="/checkout"
@@ -301,14 +286,14 @@ const CartPage: React.FC = () => {
                   <span className="text-lg font-medium">Proceed to Checkout</span>
                   <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
-
+  
                 <Link
                   to="/products"
                   className="w-full mt-4 bg-transparent border border-sage-600 text-sage-600 py-4 px-6 rounded-xl hover:bg-sage-50 transition-all duration-300 flex items-center justify-center space-x-3 group"
                 >
                   <span>Continue Shopping</span>
                 </Link>
-
+  
                 {/* Trust Badges */}
                 <div className="mt-8 pt-6 border-t border-gray-200">
                   <div className="grid grid-cols-2 gap-4 text-center">
@@ -329,14 +314,14 @@ const CartPage: React.FC = () => {
               </div>
             </div>
           </div>
-
+  
           {/* Recommended Products (static demo only) */}
           <div className="mt-24">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-light text-gray-900 mb-6">You might also like</h2>
               <p className="text-lg text-gray-600">Complete your Korean fashion collection</p>
             </div>
-
+  
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
                 {
@@ -399,7 +384,7 @@ const CartPage: React.FC = () => {
           </div>
         </div>
       </div>
-
+  
       <Footer />
     </div>
   );
